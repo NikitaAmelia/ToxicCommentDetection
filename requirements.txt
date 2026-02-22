@@ -1,7 +1,5 @@
-flask
-pandas
-scikit-learn
-nltk
+streamlit
 transformers
 torch
-pyngrok
+pandas
+scikit-learn

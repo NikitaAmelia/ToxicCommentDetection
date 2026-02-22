@@ -1,5 +1,7 @@
-streamlit
+flask
+flask-cors
 transformers
 torch
-pandas
 scikit-learn
+pandas
+gunicorn

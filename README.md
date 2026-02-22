@@ -144,6 +144,7 @@ http://localhost:8501
 - REST API deployment
 - Real-time moderation integration
 
+---
 
 <img width="1893" height="872" alt="Screenshot 2026-02-22 220729" src="https://github.com/user-attachments/assets/b7409a05-fc17-442c-a644-4791b44f0a2c" />
 

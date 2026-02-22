@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Twitter Post - Halle Bailey</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: "Segoe UI", Arial, sans-serif; }
+    .icon {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke-width: 1.6;
+      stroke: currentColor;
+    }
+    .action {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgb(83, 100, 113);
+      transition: color 0.15s ease-in-out;
+    }
+    .action:hover svg.comment { stroke: #1d9bf0; }
+    .action:hover svg.retweet { stroke: #00ba7c; }
+    .action:hover svg.like { stroke: #f91880; }
+    .action:hover svg.bookmark { stroke: #ffd400; }
+    .action:hover svg.share { stroke: #1d9bf0; }
+    .action:hover { cursor: pointer; }
+  </style>
+</head>
+
+<body class="bg-white text-black min-h-screen">
+  <!-- Header -->
+  <header class="border-b border-gray-200 bg-white px-4 py-3 flex items-center gap-8 sticky top-0 z-50">
+    <h1 class="text-xl font-bold">Posting</h1>
+  </header>
+
+  <div class="max-w-2xl mx-auto">
+    <!-- Main Post -->
+    <article class="border-b border-gray-200 p-4 bg-white">
+      <div class="flex items-start gap-3">
+        <img src="{{ url_for('static', filename='halle.jpg') }}" alt="Halle" class="w-12 h-12 rounded-full">
+        <div class="flex-1">
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-bold text-[15px]">Halle</span>
+          </div>
+          <p class="text-gray-500 text-[15px] mb-2">@HalleBailey</p>
+          <p class="text-[15px] leading-relaxed mb-3">love? or something like it’ — my debut album. a story of first love, heartbreak, and everything that comes after. out 10/24. this one means everything to me. ♥️</p>
+
+          <!-- Timestamp -->
+          <p class="text-gray-500 text-sm mb-3">
+            1:12 AM · Oct 9, 2025 · <span class="font-bold text-black">2.4M</span> Views
+          </p>
+
+          <hr class="border-gray-200 mb-3">
+
+          <!-- Reaction Bar (mirip X asli) -->
+          <div class="flex justify-between text-[14px]">
+            <div class="action">
+              <!-- comment icon -->
+              <svg class="icon comment" viewBox="0 0 24 24">
+                <path d="M1.75 12c0 5.1 4.47 9.25 10.25 9.25 1.31 0 2.58-.2 3.78-.59l5.97 2.47-1.62-5.85A9.15 9.15 0 0022.25 12c0-5.1-4.47-9.25-10.25-9.25S1.75 6.9 1.75 12z"/>
+              </svg>
+              <span>1K</span>
+            </div>
+
+            <div class="action">
+              <!-- retweet icon -->
+              <svg class="icon retweet" viewBox="0 0 24 24">
+                <path d="M4.5 4.5l3.5 3.5H7v7H4v-7H1l3.5-3.5zm15 15l-3.5-3.5H17v-7h3v7h3l-3.5 3.5z"/>
+              </svg>
+              <span>13K</span>
+            </div>
+
+            <div class="action">
+              <!-- like icon -->
+              <svg class="icon like" viewBox="0 0 24 24">
+                <path d="M16.697 3.31c-1.742 0-3.41.868-4.697 2.18A6.482 6.482 0 007.303 3.31C4.106 3.31 1.5 5.916 1.5 9.113c0 5.578 10.5 11.577 10.5 11.577S22.5 14.69 22.5 9.113c0-3.197-2.606-5.803-5.803-5.803z"/>
+              </svg>
+              <span>69K</span>
+            </div>
+
+            <div class="action">
+              <!-- bookmark icon -->
+              <svg class="icon bookmark" viewBox="0 0 24 24">
+                <path d="M5 3a2 2 0 00-2 2v17l9-4 9 4V5a2 2 0 00-2-2H5z"/>
+              </svg>
+              <span>3.9K</span>
+            </div>
+
+            <div class="action">
+              <!-- share icon -->
+              <svg class="icon share" viewBox="0 0 24 24">
+                <path d="M18 8l4 4-4 4M22 12H9M6 19a2 2 0 110-4 2 2 0 010 4zM6 9a2 2 0 110-4 2 2 0 010 4z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Replies -->
+    <div id="replies" class="px-4 py-3 border-b border-gray-200 bg-white">
+      <h2 class="text-sm text-gray-500">Replies</h2>
+    </div>
+  </div>
+
+  <!-- Bottom Input -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4">
+    <div class="max-w-2xl mx-auto flex items-center gap-3">
+      <input id="commentInput" type="text" placeholder="Posting balasan Anda" class="flex-1 bg-gray-100 rounded-full px-4 py-2 text-black placeholder-gray-500 outline-none">
+      <button id="sendBtn" class="text-sky-500 font-semibold">Send</button>
+    </div>
+  </div>
+
+  <script>
+  document.getElementById("sendBtn").addEventListener("click", async () => {
+    const comment = document.getElementById("commentInput").value;
+    if (!comment) return;
+
+    const res = await fetch("/predict", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({comment: comment})
+    });
+
+    const data = await res.json();
+
+    const replies = document.getElementById("replies");
+    replies.innerHTML += `
+      <div class="border-b border-gray-200 p-3 bg-white">
+        <p><span class="font-bold">You:</span> ${data.comment}</p>
+        <p class="text-sm text-gray-500">Detected: ${data.detected_label}</p>
+        <p><span class="font-bold text-sky-500">SpreadLove:</span> ${data.bot_response}</p>
+      </div>
+    `;
+
+    document.getElementById("commentInput").value = "";
+  });
+  </script>
+</body>
+</html>
